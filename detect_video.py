@@ -33,7 +33,6 @@ flags.DEFINE_boolean('count', False, 'count objects within video')
 flags.DEFINE_boolean('dont_show', False, 'dont show video output')
 flags.DEFINE_boolean('info', False, 'print info on detections')
 flags.DEFINE_boolean('crop', False, 'crop detections from images')
-flags.DEFINE_boolean('plate', False, 'perform license plate recognition')
 
 def main(_argv):
     config = ConfigProto()
@@ -129,7 +128,7 @@ def main(_argv):
         allowed_classes = list(class_names.values())
         
         # custom allowed classes (uncomment line below to allow detections for only people)
-        #allowed_classes = ['person']
+        allowed_classes = ['person']
 
         # if crop flag is enabled, crop each detection and save it as new image
         if FLAGS.crop:
@@ -151,13 +150,13 @@ def main(_argv):
 
         if FLAGS.count:
             # count objects found
-            counted_classes = count_objects(pred_bbox, by_class = False, allowed_classes=allowed_classes)
+            counted_classes = count_objects(pred_bbox, by_class = True, allowed_classes=allowed_classes)
             # loop through dict and print
             for key, value in counted_classes.items():
                 print("Number of {}s: {}".format(key, value))
-            image = utils.draw_bbox(frame, pred_bbox, FLAGS.info, counted_classes, allowed_classes=allowed_classes, read_plate=FLAGS.plate)
+            image = utils.draw_bbox(frame, pred_bbox, FLAGS.info, counted_classes, allowed_classes=allowed_classes)
         else:
-            image = utils.draw_bbox(frame, pred_bbox, FLAGS.info, allowed_classes=allowed_classes, read_plate=FLAGS.plate)
+            image = utils.draw_bbox(frame, pred_bbox, FLAGS.info, allowed_classes=allowed_classes)
         
         fps = 1.0 / (time.time() - start_time)
         print("FPS: %.2f" % fps)
