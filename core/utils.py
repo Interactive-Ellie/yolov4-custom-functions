@@ -6,6 +6,7 @@ import tensorflow as tf
 import pytesseract
 from core.config import cfg
 import re
+import core.api as api
 
 # If you don't have tesseract executable in your PATH, include the following:
 # pytesseract.pytesseract.tesseract_cmd = r'<full_path_to_your_tesseract_executable>'
@@ -186,6 +187,9 @@ def draw_bbox(image, bboxes, info = False, counted_classes = None, show_label=Tr
                     cv2.putText(image, "{}s detected: {}".format(key, value), (5, offset),
                             cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (0, 255, 0), 2)
                     offset += height_ratio
+
+                    api.put_people_amount(value)
+
     return image
 
 def bbox_iou(bboxes1, bboxes2):
